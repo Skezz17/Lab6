@@ -1,0 +1,56 @@
+@startuml
+title UML-диаграмма классов — Лабораторная работа №6
+
+interface ITemperatureMeasure {
+  +setValue(): void
+  +getValue(): double
+}
+
+class Sensor {
+  -value: int
+  +Sensor()
+  +setValue(value: int): void
+  +getValue(): int
+}
+
+class MeasureCount {
+  -number: int
+  {static} -total: int
+  +MeasureCount()
+  +increment(): void
+  +getNumber(): int
+  {static} +getTotal(): int
+}
+
+class TemperatureMeasure {
+  -h: Sensor
+  -measure: MeasureCount
+  {static} -in: Scanner
+  +TemperatureMeasure(h: Sensor)
+  +getNumber(): int
+  +getValue(): double
+  +setValue(): void
+  {static} +getTotal(): int
+}
+
+class ShowTemperature {
+  {static} +show(t: TemperatureMeasure): void
+}
+
+class Main {
+  {static} +main(args: String[]): void
+}
+
+TemperatureMeasure ..|> ITemperatureMeasure
+TemperatureMeasure o-- "1" Sensor : aggregation
+TemperatureMeasure *-- "1" MeasureCount : composition
+ShowTemperature ..> TemperatureMeasure : uses
+Main ..> TemperatureMeasure : creates
+Main ..> Sensor : creates
+Main ..> ShowTemperature : calls
+
+note right of TemperatureMeasure
+  Gets 5 measurements for each object
+  and calculates their average.
+end note
+@enduml
